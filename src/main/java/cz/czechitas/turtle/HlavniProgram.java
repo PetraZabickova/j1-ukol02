@@ -11,38 +11,47 @@ public class HlavniProgram {
 
     public void start() {
         //TODO Tady bude kód pro kreslení želví grafiky.
-
-        nakresliCtverec(100);
-        nakresliTrojuhelnik(100);
-        nakresliKruh(10, 20);
-        nakresliObdelnik(200, 100);
-    }
-
-    public void nakresliCtverec(double delkaStrany) {
-        for (int i = 0; i < 4; i++) {
-            zofka.move(delkaStrany);
-            zofka.turnRight(90);
-        }
-    }
-
-    public void nakresliTrojuhelnik(double delkaStrany) {
-        for (int i = 0; i < 3; i++) {
-            zofka.move(delkaStrany);
-            zofka.turnLeft(120);
-        }
-    }
-
-    public void nakresliObdelnik(double delsiStrana, double kratsiStrana) {
-        for (int i = 0; i < 2; i++) {
-            zofka.move(delsiStrana);
-            zofka.turnRight(90);
-            zofka.move(kratsiStrana);
-            zofka.turnRight(90);
-        }
+        nakresliSnehulaka();
     }
 
 
-    public void nakresliKruh(double pocetStran, double delkaStrany) {
+    public void nakresliSnehulaka() {
+        int pocetStran = 30;
+
+        double prumerHlava = 30;
+        double prumerTelo = 60;
+        double prumerNohy = 80;
+        double prumerRuce = 20;
+
+        // 1. Nohy
+        nakresliKruhZPrumeru(prumerNohy, pocetStran);
+
+        // 2. Tělo
+        posunNahoru((prumerNohy + prumerTelo) / 2);
+        nakresliKruhZPrumeru(prumerTelo, pocetStran);
+
+        // 3. Hlava
+        posunNahoru((prumerTelo + prumerHlava) / 2);
+        nakresliKruhZPrumeru(prumerHlava, pocetStran);
+
+        // 4. Levá ruka
+        zofka.turnLeft(180);
+        posunDoprava((prumerTelo + prumerRuce) / 2);
+        zofka.turnLeft(90);
+        posunDolu(prumerTelo / 4);
+        nakresliKruhZPrumeru(prumerRuce, pocetStran);
+
+        // 5. Pravá ruka
+        zofka.turnRight(90);
+        posunNahoru(prumerTelo / 4);
+        zofka.turnLeft(98);
+        posunDoprava(prumerTelo + prumerRuce);
+        nakresliKruhZPrumeru(prumerRuce, pocetStran);
+    }
+
+    public void nakresliKruhZPrumeru(double prumer, double pocetStran) {
+        double obvod = Math.PI * prumer;
+        double delkaStrany = obvod / pocetStran;
         double uhel = 360 / pocetStran;
 
         for (int i = 0; i < pocetStran; i++) {
@@ -50,7 +59,27 @@ public class HlavniProgram {
             zofka.turnRight(uhel);
         }
     }
+
+    public void posunNahoru(double vzdalenost) {
+        zofka.penUp();
+        zofka.move(vzdalenost);
+        zofka.penDown();
+    }
+
+    public void posunDolu(double vzdalenost) {
+        posunNahoru(-vzdalenost);
+    }
+
+    public void posunDoprava(double vzdalenost) {
+        zofka.penUp();
+        zofka.move(vzdalenost);
+        zofka.penDown();
+    }
+
 }
+
+
+
 
 
 
